@@ -1,0 +1,185 @@
+
+## 日期：2016/10/17 下午2:03:16
+##### 错误详情： 
+```javascript
+TypeError: $(...).trim is not a function
+    at HTMLSpanElement.<anonymous> (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/page/records.js:351:51)
+    at HTMLSpanElement.dispatch (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:5:14129)
+    at HTMLSpanElement.v.handle (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:5:10866)
+```
+
+## 日期：2016/10/17 下午3:28:50
+##### 错误详情： 
+```javascript
+SyntaxError: Invalid or unexpected token
+```
+
+## 日期：2016/10/17 下午6:04:43
+##### 错误详情： 
+```javascript
+TypeError: Cannot set property '0' of undefined
+    at Object.editMic (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/js/micList.js:51:36)
+    at HTMLDocument.<anonymous> (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/js/micList.js:108:22)
+    at HTMLDocument.dispatch (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:5:14129)
+    at HTMLDocument.v.handle (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:5:10866)
+```
+
+## 日期：2016/10/17 下午6:09:40
+##### 错误详情： 
+```javascript
+ReferenceError: Invalid left-hand side in assignment
+```
+
+## 日期：2016/10/17 下午6:09:41
+##### 错误详情： 
+```javascript
+ReferenceError: MicList is not defined
+    at initPage (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/page/records.js:143:19)
+    at chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/page/records.js:350:1
+```
+
+## 日期：2016/10/17 下午6:10:39
+##### 错误详情： 
+```javascript
+SyntaxError: Unexpected token )
+```
+
+## 日期：2016/10/18 上午8:59:37
+##### 错误详情： 
+```javascript
+TypeError: Cannot set property 'name' of undefined
+    at dao.getChannel (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/js/micList.js:24:46)
+    at Object.$.ajax.done.data (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/js/dao.js:24:21)
+    at c (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:4:26036)
+    at Object.fireWith [as resolveWith] (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:4:26840)
+    at k (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:6:14258)
+    at XMLHttpRequest.r (chrome-extension://glpanclgfafimpeenkagbcmdnanbfmbd/webContent/editer/third-party/jquery.min.js:6:18646)
+```
+
+## 日期：2017/1/10 下午5:18:21
+##### 错误详情： 
+```javascript
+Error: Cannot find module './debug'
+    at Function.Module._resolveFilename (module.js:464:15)
+    at Function.Module._load (module.js:407:25)
+    at Module.require (module.js:492:17)
+    at require (internal/module.js:20:19)
+    at Object.<anonymous> (E:\业务代码\庭审系统\tingshen-rebuild\tingshen3.2-xp\src-win7\node_modules\ref\node_modules\debug\node.js:15:28)
+    at Module._compile (module.js:565:32)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:482:32)
+    at tryModuleLoad (module.js:441:12)
+    at Function.Module._load (module.js:433:3)
+```
+
+## 日期：2017/1/10 下午5:18:21
+##### 错误详情： 
+```javascript
+Error: Cannot find module './debug'
+    at Function.Module._resolveFilename (module.js:464:15)
+    at Function.Module._load (module.js:407:25)
+    at Module.require (module.js:492:17)
+    at require (internal/module.js:20:19)
+    at Object.<anonymous> (E:\业务代码\庭审系统\tingshen-rebuild\tingshen3.2-xp\src-win7\node_modules\ref\node_modules\debug\node.js:15:28)
+    at Module._compile (module.js:565:32)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:482:32)
+    at tryModuleLoad (module.js:441:12)
+    at Function.Module._load (module.js:433:3)
+```
+
+## 日期：2017/1/10 下午5:21:03
+##### 错误详情： 
+```javascript
+ajax:undefined:开始获取音频
+```
+
+## 日期：2017/1/10 下午5:21:03
+##### 错误详情： 
+```javascript
+ajax:undefined:获取音频接口地址：http://192.168.65.31:80/tshen-controlcenter/voices/search/679f8540-64f7-4234-bd86-e1dc05c96409/110
+```
+
+## 日期：2017/1/10 下午5:21:03
+##### 错误详情： 
+```javascript
+ajax:undefined:音频地址：http://192.168.65.31:88/G1/M00/01/5A/wKhBH1h0pzyEGYcwAAAAAF7c8zI476.wav?uuid=c03c2ec5-60bf-4462-bbe1-a790c262d14b
+```
+
+## 日期：2017/1/10 下午5:21:18
+##### 错误详情： 
+```javascript
+ajax:undefined:开始获取音频
+```
+
+## 日期：2017/1/10 下午5:21:18
+##### 错误详情： 
+```javascript
+ajax:undefined:获取音频接口地址：http://192.168.65.31:80/tshen-controlcenter/voices/search/679f8540-64f7-4234-bd86-e1dc05c96409/110
+```
+
+## 日期：2017/1/10 下午5:21:18
+##### 错误详情： 
+```javascript
+ajax:undefined:音频地址：http://192.168.65.31:88/G1/M00/01/5A/wKhBH1h0pzyEGYcwAAAAAF7c8zI476.wav?uuid=f5524711-89ed-4453-a308-011635e812a0
+```
+
+## 日期：2017/1/10 下午5:26:34
+##### 错误详情： 
+```javascript
+ajax:undefined:向后台保存文档
+```
+
+## 日期：2017/1/10 下午5:26:35
+##### 错误详情： 
+```javascript
+ajax:http://192.168.65.31:80/tshen-controlcenter/cases/endTrial/tshen1484039992186:error
+```
+
+## 日期：2017/1/10 下午5:30:31
+##### 错误详情： 
+```javascript
+ajax:undefined:开始获取音频
+```
+
+## 日期：2017/1/10 下午5:30:31
+##### 错误详情： 
+```javascript
+ajax:undefined:获取音频接口地址：http://192.168.65.31:80/tshen-controlcenter/voices/search/1162dd14-fa1e-4520-beb3-f211795e3c30/110
+```
+
+## 日期：2017/1/10 下午5:30:31
+##### 错误详情： 
+```javascript
+ajax:undefined:音频地址：http://192.168.65.31:88/G1/M00/01/5B/wKhBH1h0qXiENmycAAAAAF7c8zI845.wav?uuid=e4877d60-574a-4bf4-b785-02f456898999
+```
+
+## 日期：2017/1/10 下午5:30:46
+##### 错误详情： 
+```javascript
+ajax:undefined:开始获取音频
+```
+
+## 日期：2017/1/10 下午5:30:46
+##### 错误详情： 
+```javascript
+ajax:undefined:获取音频接口地址：http://192.168.65.31:80/tshen-controlcenter/voices/search/1162dd14-fa1e-4520-beb3-f211795e3c30/110
+```
+
+## 日期：2017/1/10 下午5:30:46
+##### 错误详情： 
+```javascript
+ajax:undefined:音频地址：http://192.168.65.31:88/G1/M00/01/5B/wKhBH1h0qXiENmycAAAAAF7c8zI845.wav?uuid=5dfc89cb-991d-4890-8b38-2a20d69e37d4
+```
+
+## 日期：2017/1/10 下午5:30:47
+##### 错误详情： 
+```javascript
+ajax:undefined:向后台保存文档
+```
+
+## 日期：2017/1/10 下午5:32:57
+##### 错误详情： 
+```javascript
+ajax:undefined:向后台保存文档
+```

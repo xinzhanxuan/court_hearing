@@ -1,0 +1,261 @@
+/**
+ * @description define the audio action.
+ *
+ * @author ttwang3
+ *
+ * @constructor audio.init
+ */
+var Audio = function (wrapper,audioObject,tts) {
+    this.$ = {
+        wrapper:wrapper,
+        audioProgressWrapper:wrapper.find('.audio-progress-wrapper'),
+        playBtn : wrapper.find('.pbtn'),
+        pause: wrapper.find('.pause'),//播放按钮
+        play: wrapper.find('.audio-play'),//暂停
+        forward: wrapper.find('.forward'),//快进
+        back: wrapper.find('.audio-back'),//后退
+        next :wrapper.find('.audio-next'),//下一个标志位
+        bar: wrapper.find('.audio-processbar'),//音频游标
+        value:wrapper.find('.audio-processvalue'),//音频已播放指示
+        rail:wrapper.find('.audio-progress'),//音频轨道
+        playMark :wrapper.find('.play-mark'),//测听标志位
+        volumeIcon : wrapper.find('.volume-icon'),//音量按钮
+        volumeBar:wrapper.find('.volume-processbar'),//音量调节油标
+        volumeValue:wrapper.find('.volume-processvalue'),//音量指示
+        volumeRail:wrapper.find('.volume-progress')//音量轨道
+    };
+    //this.player = document.getElementById("audio");
+    this.player = audioObject;
+    this.player.addEventListener("error",() => {
+        //设置总时长
+        util.exceptionHandle({statusText:'音频加载错误:'+this.player.src+':'+this.player.error.code});
+    });
+    this.isPlay = false;
+    this.intervalId = 0;
+    this.listen();
+};
+
+Audio.prototype = {
+
+    init : function(src){
+        setTimeout(() => {
+            if($('.open-court').hasClass('end')){
+                return
+            }
+            this.player.src = src;
+            this.player.load();
+            //有时不能触发durationChanged，故采用定时器
+            var count = 0;
+            var testTime = 1;
+            var durationId = setInterval(()=>{
+                count += 1;
+                if(!isNaN(this.player.duration)){
+                    var duration = util.getTime(this.player.duration);
+                    $('.ct').text(`00:00`);
+                    $('.dt').text(`/${duration}`);
+                    this.renderPlayMark();
+                    this.$.wrapper.addClass('show');
+                    $('#myEditor .delete-section').after('<em class="play-section"></em>');
+                    clearInterval(durationId);
+                }else if(count > 30){
+                    testTime ++;
+                    count = 0;
+                    if(testTime > 3){
+                        clearInterval(durationId);
+                        dialogUtil.showTip('获取音频时长超时',true)
+                    }else{
+                        util.exceptionHandle({statusText:'音频加载尝试第'+testTime+'次'});
+                        this.player.src = '';
+                        this.player.src = src;
+                        this.player.load();
+                    }
+                }
+            },1000); //修改后的
+        },0)
+    },
+
+    //生成标记位
+    renderPlayMark : function(){
+        $(".play-mark").remove();
+        $('font.red').each((index,item) => {
+            var bg = $(item).data('bg');
+            var ed = $(item).data('ed');
+            $(item).attr('id',bg);
+            var left = bg/this.player.duration;
+            var markPlayItem = `<i class="play-mark" data-bg="${bg}" data-ed="${ed}" style="left:${left}%"></i>`;
+            this.$.audioProgressWrapper.append(markPlayItem);
+        });
+    },
+
+    renderPlaySection : function(list){
+        $(".paly-span").remove();
+        for(var item of list){
+            var bg = item.bg;
+            var ed = item.ed;
+            var left = bg/this.player.duration;
+            var width = (ed-bg)/this.player.duration;
+            var sectionPlayItem = `<div class="paly-span" data-bg="${bg}" data-ed="${ed}" style="left:${left}%;width:${width}%"></div>`;
+            this.$.audioProgressWrapper.append(sectionPlayItem);
+        }
+    },
+
+    //播放音频
+    play : function(){
+        this.$.playBtn.removeClass("audio-play").addClass("pause");
+        this.player.play();
+        this.progress();
+        this.isPlay = true;
+    },
+
+    //暂停
+    pause: function(){
+        this.$.playBtn.removeClass("pause").addClass("audio-play");
+        this.player.pause();
+        this.isPlay = false;
+    },
+
+    //下一个标记点
+    next: function(){
+        if($('.play-mark.red').length){
+            $('.play-mark.red').next().click();
+        }else{
+            $('.play-mark:eq(0)').click();
+        }
+    },
+
+    //播放进度
+    progress:function(){
+        this.intervalId = setInterval(() => {
+            var currentTime = util.getTime(this.player.currentTime);
+            $('.ct').text(currentTime);
+            //设置当前时间
+            this.setProgressValue();
+        },100); 
+    },
+
+    //到指定起始点开始播放
+    playToTime:function(currentTime){
+        this.player.currentTime = currentTime;
+        if(!this.isPlay){
+            this.play()
+        }
+        this.setProgressValue();
+    },
+
+    //根据播放进度设置进度条
+    setProgressValue : function(){
+        var width = this.$.audioProgressWrapper.width()*this.player.currentTime/this.player.duration;
+        this.$.bar.css("left",width-10);
+        this.$.value.css("width",width + "px");
+        $('.play-mark').each(function(index,item){
+            if(Math.abs(item.offsetLeft-width)<5){
+                $('.play-mark').removeClass('red');
+                $(item).addClass('red');
+            }
+        })
+        if(this.player.ended){
+            this.pause();
+        }
+    },
+
+    //显示音频大小
+    showVolume : function(){
+        if(this.$.volumeIcon.hasClass('active')){
+            this.$.volumeIcon.removeClass('active');
+            this.$.wrapper.find('.volume-value').hide();
+        }else{
+            this.$.volumeIcon.addClass('active');
+            this.$.wrapper.find('.volume-value').show();
+        }
+    },
+
+    //设置音量
+    setVolume : function(volume){
+        this.player.volume = volume;
+    },
+
+    //隐藏播放器
+    close : function(){
+        this.pause();
+        this.$.bar.css("left",-10);
+        this.$.value.css("width",0);
+        this.$.wrapper.removeClass('show');
+        $('.play-section').remove();
+    },
+
+    listen: function () {
+        
+        var iconv = require('iconv-lite');
+
+        this.$.play.on('click',() => this.isPlay ? this.pause(): this.play());
+
+        this.$.forward.on('click',() => this.playToTime(this.player.currentTime+5));
+
+        this.$.back.on('click',() => this.playToTime(this.player.currentTime-5));
+
+        this.$.next.on('click',() => this.next());
+
+        this.$.volumeIcon.on('click',() => this.showVolume());
+
+        //音频轨道
+        this.$.rail.on('click',(ev) => {
+            ev.preventDefault();
+            var currentTime = ev.offsetX/this.$.audioProgressWrapper.width()*this.player.duration;
+            this.playToTime(currentTime);
+        });
+
+        //音量轨道
+        this.$.volumeRail.on('click',(ev) => {
+            ev.preventDefault();
+            var value = this.$.volumeRail.height()-ev.offsetY;
+            if(ev.target.className == "volume-processvalue"){
+                value = this.$.volumeValue.height() - ev.offsetY
+            }
+            this.$.volumeBar.css("bottom",value-7);
+            this.$.volumeValue.css("height",value + "px");
+            var volume = value/this.$.volumeRail.height();
+            this.setVolume(volume);
+        });
+
+        this.$.audioProgressWrapper.on('click','.play-mark',(ev) => {
+            var target = ev.target;
+            var currentTime = $(target).data('bg')/100;
+            var scrollBody = $('#abstract .record-top');
+            if(window.config.versionType == 'win7'){
+                scrollBody = $('#abstract .record-content');
+            }
+            var st = scrollBody.scrollTop()-140;
+            $('.bg-yellow').removeClass('bg-yellow');
+            $('#' + $(target).data('bg')).addClass('bg-yellow');
+            scrollBody.animate({scrollTop:st+$('#' + $(target).data('bg')).offset().top}, 800);
+            this.playToTime(currentTime);
+        });
+
+        $('.open-sound-sub').on('click',(ev) => {
+            ev.stopPropagation();
+            if(window.TTSPlayStatus){
+                window.TTSPlayStatus = false;
+                var target = ev.target;
+                var id = $(target).attr('id');
+                if(window.ttsContent && window.ttsContent[`${id}`] && window.ttsContent[`${id}`].length){
+                    var voiceData = iconv.encode(window.ttsContent[`${id}`],'gbk');
+                    if(voiceData.length){
+                        tts.TTSPlay(voiceData,voiceData.length);
+                    }else{
+                        window.TTSPlayStatus = true;
+                    }
+                }else{
+                    window.TTSPlayStatus = true;
+                }
+            }
+             
+        });
+
+        $('.sound').on('click',function() {
+            if($(this).hasClass('sound-play')){
+                tts.TTSStop();
+            }
+        })
+    }
+
+};

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>讯飞智能庭审系统</title>
+        <link rel="stylesheet" href="../css/base.css"/>
+        <link rel="stylesheet" href="../css/app.css"/>
+        <link rel="stylesheet" href="../css/ui-dialog.css"/>
+        <link href="../editer/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    </head>
+    <body class="records">
+        <header></header>
+        <div class="content records">
+            <ul class="records-header">
+                <li class="material"> 
+                    <i class="icon"></i>
+                    <span class="records-header-word">案件资料(<em class="records-header-num">0</em>)
+                    </span>
+                </li>
+                <li class="import">
+                    <i class="icon"></i>
+                    <span class="import-doc-wrapper" title=" "><input name="import-doc" type="file" accept=".docx,application/msword"></span>
+                    <span class="records-header-word">导入模板</span>
+                </li>
+                <li class="sound">
+                    <i class="icon"></i>
+                    <span class="records-header-word">播报</span>
+                    <div class="open-sound-sub">
+                        <div id="discipline" class="sound-item">法庭纪律</div>
+                        <div id="judge" class="sound-item">审判员到庭</div>
+                        <div id="witness" class="sound-item">证人到庭</div>
+                    </div>
+                </li>
+                <li class="split-line"></li>
+                <li class="export">
+                    <i class="icon"></i>
+                    <span class="records-header-word">导出</span>
+                </li>
+                <li class="print">
+                    <i class="icon"></i>
+                    <span class="records-header-word">打印</span>
+                </li>
+                <li class="show-setting">
+                    <i class="icon"></i>
+                    <span class="records-header-word">上传</span>
+                </li>
+                <li class="split-line"></li>
+                <li class="open-court">
+                    <i class="icon"></i>
+                    <span class="records-header-word">开庭</span>
+                </li>
+                <li class="pause-court disable">
+                    <i class="icon"></i>
+                    <span class="records-header-word">休庭</span>
+                </li>
+                <li class="close-court disable">
+                    <i class="icon"></i>
+                    <span class="records-header-word">闭庭</span>
+                </li>
+            </ul>
+            <a class="icon-all back" title="返回首页">返回</a>
+            <span class="case-name"></span>
+            <div class="op-wrapper records">
+                <div class="left-section">
+                    <div class="tab-wrapper">
+                        <span class="active">摘要笔录</span>
+                        <span>全文记录</span>
+                    </div>
+                    <div id="abstract" class="tab-item">
+                        <div class="record-control" style="display:none">
+                            <span class="on">ON</span>
+                            <span class="off active">OFF</span>
+                        </div>
+                        <div class="font-edit-wrapper">
+                            <span class="font-edit main-title">标题</span>
+                            <span class="font-edit sub-title">副标题</span>
+                            <span class="font-edit signature">署名</span>
+                        </div>
+                        <div class="court-tip">
+                            当前未开庭
+                        </div>
+                        <div class="time-tip">
+                            00:00:00
+                        </div>
+                        <div class="record-top">
+                            <div class="record-content content-empty">
+                                <script type="text/plain" id="myEditor" style="min-height:100%"></script>
+                            </div>
+                        </div>
+                        <div class="record-search up">
+                            <div class="open up">
+                                <i></i>
+                            </div>
+                            <input class="search-inp">
+                            <button class="button search-button search">查找</button>
+                            <button class="button search-button replace">替换</button>
+                        </div>
+                        <div class="record-anchor"></div>
+                    </div>
+
+                    <div id="fulltext" class="tab-item" style="display:none">
+                        <div class="record-top">
+                            <div class="record-content">
+                                <script type="text/plain" id="myEditor2" style="min-height:100%"></script>
+                            </div>
+                        </div>
+                        <div class="record-anchor"></div>
+                    </div>
+                </div>
+                <div class="record-mic-open">
+                    <div class="record-mic-open-icon"></div>
+                </div>
+                <div class="record-mic">
+                </div>
+                <div class="right-section">
+                    <div class="hot-word-wrapper">
+                        <div class="right-tab-wrapper">
+                            <div class="active">
+                                <span>个性化词库</span>
+                            </div>
+                        </div>
+                        <div class="right-tab-item hot-word">
+                            <ul></ul>
+                            <div class="hot-word-input-wrapper">
+                                <input class="hot-word-inp" placeholder="请输入个性化词汇">
+                                <i class="hot-word-inp-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sound-wrapper">
+                        <div class="sound-value" style="display:none">
+                            <div class="sound-header">
+                                <i class="sound-user-icon"></i>
+                                <span>【审判长】</span>
+                                <ul>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                    <i class="sound-value-item"></i>
+                                </ul>
+                            </div>
+                            <div class="sound-content">
+                            </div>
+                        </div>
+                        <div class="no-sound">
+                            <img src="../images/jinyan.png">
+                            <p>当前没有人发言</p>
+                        </div>
+                        <div class="sound-tip">
+                            <i></i>
+                            <span>音量太小</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-section-open">
+                    <div class="right-section-open-icon"></div>
+                </div>
+            </div>
+        </div>
+        <audio id="audio" controls>            
+            <source src=""/>
+        </audio>
+        <div class="audio-wrapper">
+            <div class="audio-button">
+                <i class="play-button audio-play pbtn" title="播放"></i>
+                <i class="play-button forward" title="快进5秒"></i>
+                <i class="play-button audio-back" title="回退5秒"></i>
+                <i class="play-button audio-next" title="下个标记点"></i>
+            </div>
+            <div class="audio-progress-wrapper">
+                <div class="audio-progress">
+                    <div class="audio-processbar"></div>
+                    <div class="audio-processvalue"></div>
+                </div>
+            </div>
+            <div class="audio-time">
+                <span class="ct"></span><span class="dt"></span>
+            </div>
+            <div class="audio-volume">
+                <div class="volume-value"   style="display: none;">
+                    <div class="volume-progress">
+                        <div class="volume-processbar"></div>
+                        <div class="volume-processvalue"></div>
+                    </div>
+                </div>
+                <div class="volume-icon"></div>
+            </div>
+        </div>
+        <div id="setting" style="display:none">
+            <div class="dialog-content-wrapper">
+                <div class="dialog-header">
+                    <span>配置中心</span>
+                    <i></i>
+                </div>
+                <ul class="dialog-content-left">
+                    <li class="main-item active">
+                        <span class="main-item-title">播报配置</span>
+                    </li>
+                    <li class="main-item">
+                        <span class="main-item-title">热键配置</span>
+                    </li>
+                    <li class="main-item">
+                        <span class="main-item-title">字体配置</span>
+                    </li>
+                </ul>
+                <div class="dialog-content-right">
+                    <div class="dialog-content-tab">
+                        <div class="setting-tpl dialog-content">
+                            <div class="voice-speed">
+                                <span>语速：</span>
+                                <span class="voice-speed-tip">慢</span>
+                                <div class="progress-wrapper">
+                                    <div class="progress">
+                                        <div class="processbar"></div>
+                                        <div class="processvalue"></div>
+                                    </div>
+                                </div>
+                                <span class="voice-speed-tip">快</span>
+                            </div>
+                            <div class="voice-list">
+                                <span class="voice-item active">法庭纪律</span>
+                                <span class="voice-item">审判人员到庭</span>
+                                <span class="voice-item">证人到庭</span>
+                            </div>
+                            <div class="voice-content-list">
+                                <textarea maxlength="1000">${discipline}</textarea>
+                                <textarea maxlength="1000" style="display:none">${judge}</textarea>
+                                <textarea maxlength="1000" style="display:none">${witness}</textarea>
+                            </div>
+                            <!-- <a class="add-voice">添加</a> -->
+                        </div>
+                    </div>
+                    <!-- <div class="dialog-content-tab" style="display:none">
+                        <div class="setting-tpl dialog-content">
+                            
+                        </div>
+                    </div> -->
+                    <div class="dialog-content-tab" style="display:none">
+                        <div class="setting-tpl dialog-content">
+                            <div class="dialog-content-title">热键列表</div>
+                            <table class="key-table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            功能说明
+                                        </th>
+                                        <th>
+                                            热键
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            打点标记
+                                        </td>
+                                        <td>
+                                            Ctrl+Enter
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            个性词汇替换
+                                        </td>
+                                        <td>
+                                            F1-F12
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            插入转写结果
+                                        </td>
+                                        <td>
+                                            Ctrl+Insert
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            转为说话人
+                                        </td>
+                                        <td>
+                                            Ctrl+P
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            不带格式粘贴
+                                        </td>
+                                        <td>
+                                            Ctrl+shift+V
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            输入撤销
+                                        </td>
+                                        <td>
+                                            Ctrl+Z
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            定位转写标志
+                                        </td>
+                                        <td>
+                                            ESC
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            模糊搜索
+                                        </td>
+                                        <td>
+                                            Ctrl+F
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            导出
+                                        </td>
+                                        <td>
+                                            Ctrl+S
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            笔录切换
+                                        </td>
+                                        <td>
+                                            Ctrl+Tab
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="dialog-content-tab" style="display:none">
+                        <div class="font setting-tpl dialog-content">
+                            <div id="main_title" class="font-single">
+                                <label class="font-label">标&nbsp;&nbsp;&nbsp;题：</label>
+                                <select name="fontFamily" title="字体" class="font-select">
+                                </select>
+                                <select name="fontSize" title="字号" class="font-select">
+                                </select>
+                                <select name="lineRule" title="行间距" class="font-select">
+                                    <option value="one">单倍行距</option>
+                                    <option value="onepointfive">1.5倍行距</option>
+                                    <option value="two">2倍行距</option>
+                                    <option value="min">最小值</option>
+                                    <option value="fixed">固定值</option>
+                                    <option value="multi">多倍行距</option>
+                                </select>
+                                <input name="lineSpacing" class="font-select" type="number" min="0.25" step="0.25">
+                                <p class="text-show">
+                                    <i class="icon-all left-text text-align" data-value="left" title="居左"></i>
+                                    <i class="icon-all center-text text-align" data-value="center" title="居中"></i>
+                                    <i class="icon-all right-text text-align" data-value="right" title="居右"></i>
+                                    <i class="overstriking" title="加粗">B</i>
+                                </p>
+                            </div>
+                            <div id="sub_title" class="font-single">
+                                <label class="font-label">副标题：</label>
+                                <select name="fontFamily" title="字体" class="font-select">
+                                </select>
+                                <select name="fontSize" title="字号" class="font-select">
+                                </select>
+                                <select name="lineRule" title="行间距" class="font-select">
+                                    <option value="one">单倍行距</option>
+                                    <option value="onepointfive">1.5倍行距</option>
+                                    <option value="two">2倍行距</option>
+                                    <option value="min">最小值</option>
+                                    <option value="fixed">固定值</option>
+                                    <option value="multi">多倍行距</option>
+                                </select>
+                                <input name="lineSpacing" class="font-select" type="number" min="0.25" step="0.25">
+                                <p class="text-show">
+                                <i class="icon-all left-text text-align" data-value="left" title="居左"></i>
+                                <i class="icon-all center-text text-align" data-value="center" title="居中"></i>
+                                <i class="icon-all right-text text-align" data-value="right" title="居右"></i>
+                                <i class="overstriking" title="加粗">B</i>
+                                </p>
+                            </div>
+                            <div id="main_text" class="font-single text-main">
+                                <label class="font-label">正&nbsp;&nbsp;&nbsp;文：</label>
+                                <select name="fontFamily" title="字体" class="font-select">
+                                </select>
+                                <select name="fontSize" title="字号" class="font-select">
+                                </select>
+                                <select name="lineRule" title="行间距" class="font-select">
+                                    <option value="one">单倍行距</option>
+                                    <option value="onepointfive">1.5倍行距</option>
+                                    <option value="two">2倍行距</option>
+                                    <option value="min">最小值</option>
+                                    <option value="fixed">固定值</option>
+                                    <option value="multi">多倍行距</option>
+                                </select>
+                                <input name="lineSpacing" class="font-select" type="number" min="0.25" step="0.25">
+                            </div>
+                            <div id="signature" class="font-single">
+                                <label class="font-label">署&nbsp;&nbsp;&nbsp;名：</label>
+                                <select name="fontFamily" title="字体" class="font-select">
+                                </select>
+                                <select name="fontSize" title="字号" class="font-select">
+                                </select>
+                                <select name="lineRule" title="行间距" class="font-select">
+                                    <option value="one">单倍行距</option>
+                                    <option value="onepointfive">1.5倍行距</option>
+                                    <option value="two">2倍行距</option>
+                                    <option value="min">最小值</option>
+                                    <option value="fixed">固定值</option>
+                                    <option value="multi">多倍行距</option>
+                                </select>
+                                <input name="lineSpacing" class="font-select" type="number" min="0.25" step="0.25">
+                                <p class="text-show">
+                                <i class="icon-all left-text text-align" data-value="left" title="居左"></i>
+                                <i class="icon-all center-text text-align" data-value="center" title="居中"></i>
+                                <i class="icon-all right-text text-align" data-value="right" title="居右"></i>
+                                </p>
+                            </div>
+                            <div id="text_header" class="font-single text-header">
+                                <input type="checkbox" name="check-header">
+                                <label class="font-label">页眉&nbsp;&nbsp;</label>
+                                <input name="page-header" type="text" class="font-select none" placeholder="请输入内容" maxlength="50">
+                                <p class="text-show none">
+                                    <select name="fontFamily" title="字体" class="font-select left">
+                                    </select>
+                                    <select name="fontSize" title="字号" class="font-select left">
+                                    </select>
+                                    <i class="icon-all left-text text-align" data-value="left" title="居左"></i>
+                                    <i class="icon-all center-text text-align" data-value="center" title="居中"></i>
+                                    <i class="icon-all right-text text-align" data-value="right" title="居右"></i>
+                                </p>
+                            </div>
+                            <div id="text_footer" class="font-single text-footer">
+                                <input type="checkbox" name="check-footer">
+                                <label class="font-label">页脚</label>
+                                <input name="page-footer" type="text" class="font-select none" placeholder="请输入内容" maxlength="50">
+                                <p class="text-show none">
+                                    <select name="fontFamily" title="字体" class="font-select left">
+                                    </select>
+                                    <select name="fontSize" title="字号" class="font-select left">
+                                    </select>
+                                    <i class="icon-all left-text text-align" data-value="left" title="居左"></i>
+                                    <i class="icon-all center-text text-align" data-value="center" title="居中"></i>
+                                    <i class="icon-all right-text text-align" data-value="right" title="居右"></i>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dialog-footer">
+                        <button class="button red-button save">保&nbsp;&nbsp;存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="quit-tip-cover none"><div class="quit-tip"><span>当前未闭庭，请先闭庭</span> </div></div>
+        <script type="text/javascript" src="../editer/third-party/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="../editer/umeditor.config.js"></script>
+        <script type="text/javascript" charset="utf-8" src="../editer/umeditor.js"></script>
+        <script type="text/javascript" src="../editer/lang/zh-cn/zh-cn.js"></script> 
+        <script src="../libs/dialog-min.js"></script>
+        <script src="../libs/juicer.js"></script>
+        <script src="../js/toolBar.js"></script>
+        <script src="../js/eventController.js"></script>
+        <script src="../js/validate.js"></script>
+        <script src="../js/util.js"></script>
+        <script src="../libs/jquery.fly.min.js"></script>
+        <script src="../js/readConfig.js"></script>
+        <script src="../js/consumer.js"></script>
+        <script src="../js/searchReplace.js"></script>
+        <script src="../js/page.js"></script>
+        <script src="../js/micList.js"></script>
+        <script src="../js/material.js"></script>
+        <script src="../js/hotWord.js"></script>
+        <script src="../js/editer.js"></script>
+        <script src="../js/hotKey.js"></script>
+        <script src="../js/hotKeyAbs.js"></script>
+        <script src="../js/hotKeyFull.js"></script>
+        <script src="../js/audio.js"></script>
+        <script src="../js/dao.js"></script>        
+        <script src="../js/dialogUtil.js"></script>
+        <script src="../page/records.js"></script>
+    </body>
+</html>

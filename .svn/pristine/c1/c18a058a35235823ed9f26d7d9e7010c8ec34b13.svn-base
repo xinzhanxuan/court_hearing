@@ -1,0 +1,33 @@
+﻿{
+  "name": "tingshen1",
+  "main": "webContent/index.html",
+  "version": "0.0.1",
+  "description": "tingshen app",
+  "window": {
+    "title": "讯飞智慧庭审系统",
+    "icon": "webContent/images/exe.png",
+    "position": "center",
+    "show": true,
+    "width": 984,
+    "height": 720,
+    "toolbar": false,
+    "frame": false,
+    "resizable": true,
+    "min_width": 984,
+    "min_height": 720,
+    "always-on-top":true
+  },
+  "node-main": "webContent/node-main.js",
+  "contributors": [
+    {
+      "name": "ttwang",
+      "email": "ttwang3@iflytek.com"
+    }
+  ],
+  "dependencies": {
+    "MD5": "1.2.1",
+    "kafka-node":"^0.5.0",
+    "optimist":"0.6.1",
+    "lodash":"3.10.1"
+  }
+}

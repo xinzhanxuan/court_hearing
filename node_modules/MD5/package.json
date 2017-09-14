@@ -1,0 +1,101 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "MD5@1.2.1",
+        "scope": null,
+        "escapedName": "MD5",
+        "name": "MD5",
+        "rawSpec": "1.2.1",
+        "spec": "1.2.1",
+        "type": "version"
+      },
+      "E:\\业务代码\\tingshen"
+    ]
+  ],
+  "_from": "MD5@1.2.1",
+  "_id": "MD5@1.2.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/MD5",
+  "_npmUser": {
+    "name": "pvorb",
+    "email": "paul@vorba.ch"
+  },
+  "_npmVersion": "1.4.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "MD5@1.2.1",
+    "scope": null,
+    "escapedName": "MD5",
+    "name": "MD5",
+    "rawSpec": "1.2.1",
+    "spec": "1.2.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/MD5/-/MD5-1.2.1.tgz",
+  "_shasum": "2f0b755ad2f2ae2db716d90c4cc85026e87998e1",
+  "_shrinkwrap": null,
+  "_spec": "MD5@1.2.1",
+  "_where": "E:\\业务代码\\tingshen",
+  "author": {
+    "name": "Paul Vorbach",
+    "email": "paul@vorb.de",
+    "url": "http://vorb.de"
+  },
+  "bugs": {
+    "url": "https://github.com/pvorb/node-md5/issues"
+  },
+  "contributors": [
+    {
+      "name": "salba"
+    }
+  ],
+  "dependencies": {
+    "charenc": ">= 0.0.1",
+    "crypt": ">= 0.0.1"
+  },
+  "deprecated": "deprecated, use lowercase 'md5@2.x' from now on",
+  "description": "native js function for hashing messages with MD5",
+  "devDependencies": {
+    "mocha": "~ 1.4.2"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "2f0b755ad2f2ae2db716d90c4cc85026e87998e1",
+    "tarball": "https://registry.npmjs.org/MD5/-/MD5-1.2.1.tgz"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "homepage": "https://github.com/pvorb/node-md5",
+  "main": "md5.js",
+  "maintainers": [
+    {
+      "name": "pvorb",
+      "email": "paul@vorb.de"
+    }
+  ],
+  "name": "MD5",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pvorb/node-md5.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "tags": [
+    "md5",
+    "hash",
+    "encryption",
+    "native",
+    "message digest"
+  ],
+  "version": "1.2.1"
+}

@@ -1,0 +1,11 @@
+{
+	"httpClient":"http://192.168.65.43:8082/tshen-controlcenter",
+	"kafkaClient":"192.168.65.31:2181",
+	"courtId":"110",
+	"courtCode":"220",
+	"exportWordType":"2003",
+	"isTest":false,
+	"version":"1006",
+         "doubleVersion":"0",
+	"versionType":"win7"
+}

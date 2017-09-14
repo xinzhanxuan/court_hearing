@@ -1,0 +1,567 @@
+﻿/**
+ * @description define the toolBar action.
+ *  头部工具栏
+ * @author ttwang3
+ *
+ * @constructor toolBar.init
+ */
+var ToolBar = function(title, tts) {
+
+	var tpl = `<div class="drag"></div>
+            <i class="logo"></i> 讯飞智能庭审系统
+            <i class="icon-all close" title="退出系统"></i>
+            <i class="icon-all max" title="最大化窗口"></i>
+            <i class="icon-all recover" title="恢复窗口大小" style="display:none"></i>
+            <i class="icon-all min" title="最小化窗口"></i>
+            <i class="icon-all setting" title="设置" style="display:none"></i>`;
+
+	$('header').html(tpl);
+
+	this.$ = {
+		close: $('.close'),
+		min: $('.min'),
+		max: $('.max'),
+		recover: $('.recover'),
+		set: $('.setting')
+	};
+	this.title = title;
+
+	if(this.title == '庭审笔录') {
+
+		this.$.set.show();
+		//设置字体
+		this.fontStyle = {
+			title: {
+				type: 'main_title',
+				fontFamily: '宋体',
+				fontSize: 22,
+				lineRule: 'onepointfive',
+				textAlign: 'center',
+				overstriking: 0
+			},
+			subTitle: {
+				type: 'sub_title',
+				fontFamily: '宋体',
+				fontSize: 22,
+				lineRule: 'onepointfive',
+				textAlign: 'center',
+				overstriking: 0
+			},
+			content: {
+				type: 'main_text',
+				fontFamily: '仿宋',
+				fontSize: 16,
+				lineRule: 'fixed',
+				lineSpacing: '26'
+			},
+			signature: {
+				type: 'signature',
+				fontFamily: '仿宋',
+				fontSize: 16,
+				lineRule: 'fixed',
+				lineSpacing: '26',
+				textAlign: 'right'
+			},
+			header: {
+				type: 'text_header',
+				select: 0,
+				fontFamily: '宋体',
+				fontSize: 10.5,
+				textAlign: 'right',
+				text: ''
+			},
+			footer: {
+				type: 'text_footer',
+				select: 0,
+				fontFamily: '宋体',
+				fontSize: 10.5,
+				textAlign: 'right',
+				text: ''
+			}
+		};
+		if(util.getLocalItem('fontStyle')) {
+			this.fontStyle = JSON.parse(util.getLocalItem('fontStyle'));
+		}
+		this.tts = tts;
+		util.setContentStyle(this.fontStyle.content);
+	}
+	this.listen(this);
+};
+
+ToolBar.prototype = {
+
+	listen: function(that) {
+
+		var gui = require('nw.gui');
+		var win = gui.Window.get();
+		var screenWidth = win.window.screen.width;
+
+		//设置窗口大小从上次用户设置中获取
+		if(util.getLocalItem('maximize') == 'true') {
+			win.maximize();
+			this.$.max.hide();
+			this.$.recover.show();
+		} else {
+			if(util.getLocalItem('width')) {
+				win.resizeTo(util.getLocalItem('width') * 1, util.getLocalItem('height') * 1);
+			}
+			if(typeof(util.getLocalItem('x')) !== "undefined") {
+				win.moveTo(util.getLocalItem('x') * 1, util.getLocalItem('y') * 1);
+			}
+		}
+
+		if(this.title == '庭审笔录') {
+
+			window.ttsContent = readConfig.getConfig('tts.json');
+			var fontStyle = {
+	"fontFamily":["仿宋_GB2312",
+                "方正舒体",
+                "方正姚体",
+                "仿宋",
+                "黑体",
+                "华文仿宋",
+                "华文行楷",
+                "华文琥珀",
+                "华文楷体",
+                "华文隶书",
+                "华文宋体",
+                "华文细黑",
+                "华文新魏",
+                "华文中宋",
+                "楷体",
+                "隶书",
+                "宋体",
+                "微软雅黑",
+                "新宋体",
+                "幼圆"],
+    "fontSizeKey":[
+                "42",
+                "36",
+                "26",
+                "24",
+                "22",
+                "18",
+                "16",
+                "15",
+                "14",
+                "12",
+                "10.5",
+                "9"],
+    "fontSizeValue":[
+                "初号",
+                "小初",
+                "一号",
+                "小一",
+                "二号",
+                "小二",
+                "三号",
+                "小三",
+                "四号",
+                "小四",
+                "五号",
+                "小五"]
+}
+			var fontFamilyArray = fontStyle.fontFamily;
+			var fontFamilyOptions = '';
+			for(var f of fontFamilyArray) {
+				fontFamilyOptions += `<option value="${f}">${f}</option>`;
+			}
+			$('select[name="fontFamily"]').append(fontFamilyOptions);
+
+			var fontSizeKey = fontStyle.fontSizeKey;
+			var fontSizeValue = fontStyle.fontSizeValue;
+			var fontSizeOptions = '';
+			fontSizeKey.forEach(function(item, index) {
+				fontSizeOptions += `<option value="${item}">${fontSizeValue[index]}</option>`;
+			});
+			$('select[name="fontSize"]').append(fontSizeOptions);
+		}
+		document.title = `讯飞智能庭审系统`;
+
+		//正常关闭清空异常恢复提示
+		win.on('close', () => {
+			EventController.ee.emit('closeCourt');
+			if(this.title == '庭审笔录' && window.courtOpend) {
+				dialogUtil.showQuitTip()
+				return
+			}
+			// if($('.open-court').hasClass('disable') &&
+			// 	$('.close-court').hasClass('disable')) {
+			// 	if($('.sound').hasClass('sound-play')) {
+			// 		that.tts.TTSStop();
+			// 	}
+			// 	showKeyWord();
+			// 	win.close(true);
+			// } else {
+				dialogUtil.closeAppTip();
+				$('.close-court-btn').on('click', () => {
+					if(win.window == window) {
+						if($('.sound').hasClass('sound-play')) {
+							that.tts.TTSStop();
+						}
+						util.setLocalItem('isCrash', 0);
+						win.hide();
+						win.close(true);
+						gui.App.quit();
+					}
+				});
+			// }
+
+		});
+
+		//最大化
+		win.on('maximize', () => {
+			util.setLocalItem('maximize', true);
+			this.$.max.hide();
+			this.$.recover.show();
+		});
+
+		//非最大化
+		win.on('restore', () => {
+			var winWidth = win.width + 2 * win.x;
+			util.setLocalItem('maximize', true);
+			if(winWidth != screenWidth) {
+				this.$.recover.hide();
+				this.$.max.show();
+				util.setLocalItem('maximize', false);
+			}
+		});
+
+		//大小变化
+		win.on('resize', () => {
+			if((win.x > 0 && win.x < screenWidth) ||
+				(win.x < 0 && Math.abs(win.x) < win.width)) {
+				util.setLocalItem('width', win.width);
+				util.setLocalItem('height', win.height);
+			}
+		});
+
+		//窗口移动
+		win.on('move', () => {
+			if((win.x > 0 && win.x < screenWidth) ||
+				(win.x < 0 && Math.abs(win.x) < win.width)) {
+				util.setLocalItem('x', win.x);
+				util.setLocalItem('y', win.y);
+			}
+		});
+
+		this.$.close.on('click', function() {
+			if(win.window == window) {
+				win.close();
+			}
+		})
+
+		this.$.min.on('click', function() {
+			if(win.window == window) {
+				win.minimize();
+			}
+		})
+
+		this.$.max.on('click', () => {
+			if(win.window == window) {
+				win.maximize();
+			}
+		})
+
+		this.$.recover.on('click', () => {
+			if(win.window == window) {
+				win.restore();
+			}
+		})
+
+		function showKeyWord() {
+			var d = dialogUtil.getCommonDialog();
+			d.content($('#keyword').html());
+			d.showModal();
+			var tpl1 = '{@if caseNo}<p id="case_no"><span>案&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</span>${caseNo}</p>{@/if} {@if caseCause}<p id="case_cause"><span>案&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由：</span>${caseCause}</p>{@/if} {@if caseParty}<p id="case_party"><span>当&nbsp;&nbsp;&nbsp;事&nbsp;&nbsp;&nbsp;&nbsp;人：</span>${caseParty}</p>{@/if} {@if judge}<p id="judge"><span>审&nbsp;&nbsp;&nbsp;判&nbsp;&nbsp;&nbsp;&nbsp;长：</span>${judge}</p>{@/if} {@if collegiateBenchMember}<p id="collegiate_bench_member"><span>合议庭成员：</span>${collegiateBenchMember}</p>{@/if} {@if clerk}<p id="clerk"><span>书&nbsp;&nbsp;&nbsp;记&nbsp;&nbsp;&nbsp;&nbsp;员：</span>${clerk}</p>{@/if}';
+			dao.searchCaseByName(util.getLocalItem('caseName'), data => {
+				if(data.length) {
+					$('.ui-dialog-content .infor').append(juicer(tpl1, data[0]))
+				}
+			}, status => {
+				dialogUtil.showTip('案件查询失败', true);
+			})
+			$('.ui-dialog-content #court_time_last').text($('.time-tip').text());
+			$('.ui-dialog-content #word_count').html(num + '<em>个字</em>');
+			var tpl2 = '<ul class="xin_contect_r_c"> {@each list as item, index} <li class="xin_aa value_${index}"><span>${item.value}</span></li> {@/each} </ul>';
+			if(keyWordsMap.get('research')) {
+				var keyWords = {
+					list: keyWordsMap.get('research')
+				};
+				$('.ui-dialog-content .xin_contect_r').append('<div class="xin_case research">法庭调查</div>');
+				$('.ui-dialog-content .research').after(juicer(tpl2, keyWords));
+			}
+			if(keyWordsMap.get('debate')) {
+				var keyWords = {
+					list: keyWordsMap.get('debate')
+				};
+				$('.ui-dialog-content .xin_contect_r').append('<div class="xin_case debate">法庭辩论</div>');
+				$('.ui-dialog-content .debate').after(juicer(tpl2, keyWords));
+			}
+			if(keyWordsMap.get('state')) {
+				var keyWords = {
+					list: keyWordsMap.get('state')
+				};
+				$('.ui-dialog-content .xin_contect_r').append('<div class="xin_case state">最后陈述</div>');
+				$('.ui-dialog-content .state').after(juicer(tpl2, keyWords));
+			}
+			if(keyWordsMap.get('adjudge')) {
+				var keyWords = {
+					list: keyWordsMap.get('adjudge')
+				};
+				$('.ui-dialog-content .xin_contect_r').append('<div class="xin_case adjudge">宣判</div>');
+				$('.ui-dialog-content .adjudge').after(juicer(tpl2, keyWords));
+			}
+			var keywordAudio = new Audio($('.ui-dialog-content .keyword-audio-wrapper'), document.getElementById("keyword_audio"), tts);
+			keywordAudio.init(audioSrc);
+			var clickCount = 0;
+			$('.ui-dialog-content .xin_aa').on('click', function(evt) {
+				
+				var parentObj = $(this).parent('.xin_contect_r_c').prev();
+				var name = parentObj[0].classList[1];
+				var index = this.classList[1].split('_')[1] * 1;
+				var timeList = keyWordsMap.get(name)[index].list;
+				if($(this).hasClass('active')) {
+					clickCount += 1
+					if(clickCount == timeList.length || clickCount > timeList.length) {
+						clickCount = 0;
+					}
+				} else {
+					clickCount = 0;
+					$('.xin_aa').removeClass('active');
+					$(this).addClass('active');
+					keywordAudio.renderPlaySection(timeList);
+					
+				}
+				var currentTime = $('.paly-span:eq(' + clickCount + ')').data('bg') / 100;
+				keywordAudio.playToTime(currentTime);
+			});
+
+			$('.dialog-header i').on('click', function() {
+				dialogUtil.closeAppTip();
+				$('.close-court-btn').on('click', () => {
+					if(win.window == window) {
+						util.setLocalItem('isCrash', 0);
+						win.hide();
+						win.close(true);
+						gui.App.quit();
+					}
+				});
+			})
+		}
+
+		//设置字体样式
+		function setFontStyle(wrapper, data) {
+			wrapper.find('select[name="fontFamily"]').val(data.fontFamily);
+			wrapper.find('select[name="fontSize"]').val(data.fontSize);
+			wrapper.find('select[name="lineRule"]').val(data.lineRule);
+			wrapper.find('input[name="lineSpacing"]').val(data.lineSpacing);
+			wrapper.find('.' + data.textAlign + '-text').addClass('active');
+			if(data.overstriking) {
+				wrapper.find('.overstriking').addClass('active');
+			}
+			if(data.select === 1) {
+				wrapper.find('input[type="checkbox"]').prop("checked", true);
+				wrapper.find('.text-show, input[type="text"]').removeClass('none');
+			} else if(data.select === 0) {
+				wrapper.find('.text-show, input[type="text"]').addClass('none');
+			}
+			wrapper.find('input[type="text"]').val(data.text);
+		}
+
+		function getFontStyle(wrapper, data) {
+			data.fontFamily = wrapper.find('select[name="fontFamily"]').val();
+			data.fontSize = wrapper.find('select[name="fontSize"]').val();
+			if(data.type !== 'text_header' &&
+				data.type !== 'text_footer') {
+				data.lineRule = wrapper.find('select[name="lineRule"]').val();
+				data.lineSpacing = wrapper.find('input[name="lineSpacing"]').val();
+			}
+			if(data.type !== 'main_text') {
+				data.textAlign = wrapper.find('.text-align.active').data("value");
+			}
+			var overstriking = wrapper.find('.overstriking');
+			if(overstriking.length) {
+				data.overstriking = 0
+				if(overstriking.hasClass('active')) {
+					data.overstriking = 1
+				}
+			}
+			if(data.type == 'text_header' ||
+				data.type == 'text_footer') {
+				data.select = 0;
+				var select = wrapper.find('input[type="checkbox"]').prop("checked");
+				if(select) {
+					data.select = 1;
+				}
+				data.text = wrapper.find('input[type="text"]').val().trim();
+			}
+			return data;
+		}
+
+		//设置
+		this.$.set.on('click', () => {
+			var d = dialogUtil.getCommonDialog();
+			d.content(juicer($('#setting').html(), window.ttsContent));
+			d.showModal();
+			//tab切换
+			$('.ui-dialog-content .main-item').on('click', function() {
+				if($(this).hasClass('active')) {
+					return;
+				}
+				$(".ui-dialog-content .main-item").removeClass('active');
+				$(this).addClass('active');
+				var index = $(this).index();
+
+				$(".ui-dialog-content .dialog-content-tab").hide();
+				$(".ui-dialog-content .dialog-content-tab:eq(" + index + ")").show();
+				if(index == 0) {
+					$('.ui-dialog-content .voice-item:eq(0)').click();
+				}
+			});
+
+			var ttsSpeed = window.ttsSpeed || 0;
+			var speedProgressWidth = 140;
+			var processbarWidth = ttsSpeed * speedProgressWidth / 32760 + speedProgressWidth;
+			//设置播报速度
+			$('.ui-dialog-content .processbar').css("width", processbarWidth);
+			$('.ui-dialog-content .processvalue').css("left", processbarWidth - 5);
+
+			//播报速度设置
+			/*$('.ui-dialog-content .progress').on('click',function(ev){
+			    ev.preventDefault();
+			    var value = Math.ceil((ev.offsetX - speedProgressWidth)*32768/speedProgressWidth);
+			    $('.ui-dialog-content .processbar').css("width",ev.offsetX);
+			    $('.ui-dialog-content .processvalue').css("left",ev.offsetX-5);
+			    window.ttsSpeed = value;
+			    tts.TTSSetSpeed(value);
+			});*/
+
+			var obj = $('.ui-dialog-content .processvalue')[0];
+			var pWidth = $('.ui-dialog-content .progress').width();
+			obj.onmousedown = function(ev) {
+				var ev = ev || event;
+				var disX = ev.clientX - this.offsetLeft,
+					disY = ev.clientY - this.offsetTop;
+				var oWidth = obj.offsetWidth;
+				ev.stopPropagation ? ev.stopPropagation() : ev.cancelBubble = true;
+
+				document.onmousemove = function(ev) {
+					var ev = ev || event;
+					var left = ev.clientX - disX;
+					obj.style.left = left - 5 + 'px';
+					$('.ui-dialog-content .processbar').css("width", left);
+
+					//左侧
+					if(obj.offsetLeft <= -5) {
+						obj.style.left = -5 + 'px';
+						$('.ui-dialog-content .processbar').css("width", 0);
+					};
+					//右侧
+					if(obj.offsetLeft >= pWidth - oWidth + 5) {
+						obj.style.left = pWidth - oWidth + 5 + 'px';
+						$('.ui-dialog-content .processbar').css("width", pWidth);
+					};
+				};
+
+				document.onmouseup = function(ev) {
+					var ev = ev || event;
+					document.onmousemove = document.onmouseup = null;
+				};
+
+			};
+
+			//播报内容
+			$('.ui-dialog-content .voice-item').on('click', function() {
+				if($(this).hasClass('active')) {
+					return;
+				}
+				$(".ui-dialog-content .voice-item").removeClass('active');
+				$(this).addClass('active');
+				var index = $(this).index();
+				$(".ui-dialog-content .voice-content-list textarea").hide();
+				$(".ui-dialog-content .voice-content-list textarea:eq(" + index + ")").show();
+			});
+
+			if(that.fontStyle) {
+				for(var item in that.fontStyle) {
+					var wrapper = that.fontStyle[item].type;
+					setFontStyle($('.ui-dialog-content #' + wrapper), that.fontStyle[item])
+				}
+			}
+
+			//字体设置
+			$('.ui-dialog-content select[name="lineRule"]').on('change', function() {
+				var value = $(this).val();
+				if(value == 'one' || value == 'onepointfive' || value == 'two') {
+					$(this).next().removeAttr("min").removeAttr("step").val("");
+				} else if(value == 'min') {
+					$(this).next().attr('min', '0').attr('step', '1').val(12);
+				} else if(value == 'fixed') {
+					$(this).next().attr('min', '1').attr('step', '1').val(12);
+				} else if(value == 'multi') {
+					$(this).next().attr('min', '0.25').attr('step', '0.25').val(3);
+				}
+			});
+
+			//居中设置
+			$('.text-align').on('click', function() {
+				$(this).siblings('.text-align').removeClass('active');
+				$(this).addClass('active');
+			});
+			$('.overstriking').on('click', function() {
+				$(this).toggleClass('active');
+			});
+
+			$('.ui-dialog-content input[name="lineSpacing"]').on('change', function() {
+				//lineRule值
+				var selectValue = $(this).prev().val();
+				var value = $(this).val();
+				if(selectValue == 'one' ||
+					selectValue == 'onepointfive' ||
+					selectValue == 'two' ||
+					selectValue == 'multi' &&
+					value) {
+					$(this).prev().val("multi");
+				}
+			});
+
+			//页眉页脚设置
+			$('.text-header input[name="check-header"]').on('change', function() {
+				$('.text-header .text-show,.text-header input[name="page-header"]').toggleClass('none');
+			});
+
+			$('.text-footer input[name="check-footer"]').on('change', function() {
+				$('.text-footer .text-show,.text-footer input[name="page-footer"]').toggleClass('none');
+			});
+
+			$('button.save').on('click', function() {
+				var ttsContent = {
+					"discipline": $('.ui-dialog-content .voice-content-list textarea:eq(0)').val().trim(),
+					"judge": $('.ui-dialog-content .voice-content-list textarea:eq(1)').val().trim(),
+					"witness": $('.ui-dialog-content .voice-content-list textarea:eq(2)').val().trim()
+				}
+				for(var item in that.fontStyle) {
+					var wrapper = that.fontStyle[item].type;
+					that.fontStyle[item] = getFontStyle($('.ui-dialog-content #' + wrapper), that.fontStyle[item])
+				}
+				util.setContentStyle(that.fontStyle.content);
+				util.setLocalItem('fontStyle', JSON.stringify(that.fontStyle));
+				if(!ttsContent.discipline.length ||
+					!ttsContent.judge.length ||
+					!ttsContent.witness.length) {
+					dialogUtil.showTip('播报内容不能为空', true)
+					return
+				}
+				window.ttsContent = ttsContent;
+				readConfig.writeConfig(`tts.json`, window.ttsContent);
+				var valueWidth = $('.ui-dialog-content .processbar').width();
+				var value = Math.ceil((valueWidth - speedProgressWidth) * 32760 / speedProgressWidth);
+				window.ttsSpeed = value;
+				tts.TTSSetSpeed(value);
+				dialogUtil.closeCommonDialog();
+			})
+		});
+
+	}
+}

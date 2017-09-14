@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>讯飞智能庭审系统</title>
+        <link rel="stylesheet" href="css/base.css"/>
+        <link rel="stylesheet" href="css/app.css"/>
+        <script type="text/javascript" src="editer/third-party/jquery.min.js"></script>
+        <script src="libs/dialog-min.js"></script>
+        <script src="libs/juicer.js"></script>
+        <script src="js/eventController.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/readConfig.js"></script>
+        <script src="js/dialogUtil.js"></script>
+        <script src="js/dao.js"></script>     
+        <script src="js/toolBar.js"></script>
+    </head>
+    <body class="index">
+        <header></header>
+        <div class="content">
+            <div class="case-wrapper">
+                <label>请输入案件号</label>
+                <div class="case-inp-wrapper">
+                    <input class="case-inp" placeholder="请输入完整的案件号" maxlength="100">
+                    <span class="button red-button search-case icon-all">查　询</span>
+                </div>
+            </div>
+            <div class="infor-wrapper none">
+                <div class="infor none">
+                    <h2>案件信息</h2>
+                    <p id="case_cause"></p>
+                    <p id="case_no"></p>
+                    <p id="case_party"></p>
+                    <p id="judge"></p>
+                    <p id="collegiate_bench_member"></p>
+                    <p id="clerk"></p>
+                </div>
+                <span class="infor-empty-tip" style="display:none">在本系统中未查到“”案件信息，</br>请点击“新建庭审”进入庭审</span>
+                <div class="patch-button-wrapper">
+                    <a class="button red-button patch-next">新建庭审</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="page/index.js"></script>
+</html>

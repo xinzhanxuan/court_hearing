@@ -1,0 +1,53 @@
+﻿(function(){
+
+    var path = require('path');
+    var fs = require('fs');
+    var gui = require('nw.gui');
+    var execPath = process.execPath;
+
+    var Config = function(){};
+
+    Config.prototype = {
+
+        /**
+         * 从配置文件中读取
+         * 采用同步API，而不是异步的方式，虽然按照程序执行的逻辑来看，异步肯定也是没问题的
+         * 但是考虑到异常情况，要阻塞一下，故采用同步方式
+         */
+        getConfig: (fileName) => {
+            var jsonStr = fs.readFileSync(path.join(execPath, '..', 'conf', fileName), 'utf-8');
+            if (! jsonStr) {
+              console.error(jsonStr);
+            }
+            else {
+              // 防止格式出错，放入try...catch块中
+              try {
+                console.log(jsonStr);
+                var data = JSON.parse(jsonStr);
+                return data;
+              } catch(err) {
+                util.exceptionHandle(err);
+              }
+            }
+        },
+
+        writeConfig:(fileName,data) => {
+            fs.writeFile(path.join(execPath, '..', 'conf', fileName), JSON.stringify(data), function (err) {
+                if (err) {
+                  util.exceptionHandle(err);
+                }
+            });
+        },
+
+        deleteConfig:(fileName) => {
+            fs.unlink(path.join(execPath, '..', 'conf', fileName), function (err) {
+                if (err) {
+                  util.exceptionHandle(err);
+                }
+            });
+        }
+
+    }
+    
+    window.readConfig = new Config();
+})(window)
